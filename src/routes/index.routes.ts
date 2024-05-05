@@ -21,4 +21,8 @@ router.use("/user", authBasic, routerUser)
 router.use("/category", validateToken, routerCategory)
 router.use("/task", validateToken, routerTask)
 
+router.use("*", (req: Request, res: Response) => {
+    res.status(404).json({ message: "essa url não faz parte dessa API" });
+});
+
 export default router;

@@ -8,7 +8,6 @@ const categoryTable = new PrismaClient().category;
 
 export const createCategory = async (req: Request, res: Response) => {
   try{
-    console.log(req.body);
     if (verif_body(req,res, CategoryModel)){
       const categoryData : Category = req.body;
       console.log(categoryData);
@@ -29,9 +28,25 @@ export const createCategory = async (req: Request, res: Response) => {
 export const updateCategory = async (req: Request, res: Response) => {
   try{
     if (verif_body(req,res, CategoryModel)){
-      const userId: string = req.body.userId as string;  
       const categoryId:string = req.params.id as string;
       const categoryData : Category = req.body as Category;
+      const userId: string = categoryData.userId as string;
+      const selectCategory = await categoryTable.findUnique({
+        where: {
+          id: categoryId
+        },
+        select:{
+          userId: true
+        }
+      });
+
+      if(selectCategory === null){
+        return handled_response(res, 404, {msg: 'nenhum dado encontrado na tabela para o id: ' + [categoryId]});
+      }
+      if(selectCategory.userId !== userId){
+        return handled_response(res, 401, {msg: 'você não tem permissão para alterar esse dado'});
+      }
+
       const category = await categoryTable.update({
         data: {
           ...categoryData
@@ -41,10 +56,6 @@ export const updateCategory = async (req: Request, res: Response) => {
           userId: userId
         }
       });
-
-      if (category === null){
-        return handled_response(res, 404, { data: { msg: 'nenhum dado encontrado na tabela para o id: ' + [categoryId] } });
-      }
 
       return handled_response(res, 201, category);
     }
@@ -124,16 +135,39 @@ export const deleteCategory = async (req: Request, res: Response) => {
     try{
       const userId: string = req.query.userId as string;
       const categoryId: string = req.params.id as string;
+      const selectCategory = await categoryTable.findUnique({
+        where: {
+          id: categoryId
+        },
+        select:{
+          userId: true
+        }
+      });
+
+      if(selectCategory === null){
+        return handled_response(res, 404, {msg: 'nenhum dado encontrado na tabela para o id: ' + [categoryId]});
+      }
+      if(selectCategory.userId !== userId){
+        return handled_response(res, 401, {msg: 'você não tem permissão para deletar esse dado'});
+      }
+
       const category = await categoryTable.delete({
         where: {
           id: categoryId,
           userId: userId
         },
+        select: {
+          id: true,
+          name: true,
+          user:{
+            select: {
+              id: true,
+              username: true,
+              email: true
+            }
+          }
+        }
       });
-
-      if (category === null){
-        return handled_response(res, 404, { data: { msg: 'nenhum dado encontrado na tabela para o id: ' + [categoryId] } });
-      }
   
       return handled_response(res, 200, category);
     }catch(e){

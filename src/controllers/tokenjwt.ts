@@ -43,7 +43,7 @@ export const validateToken = async (req: Request, res: Response, next: NextFunct
     const secret = process.env.JWT_SECRET || 'luis';
     const decoded: string | jwt.JwtPayload = await jwt.verify(token, secret);
     if (typeof decoded === 'object' && Object(decoded).hasOwnProperty('user_acess')){
-      if (req.method === 'POST' || req.method === 'PUT' || req.method === 'DELETE')
+      if (req.method === 'POST' || req.method === 'PUT')
         req.body.userId = decoded.user_acess
       else
         req.query.userId = decoded.user_acess;
