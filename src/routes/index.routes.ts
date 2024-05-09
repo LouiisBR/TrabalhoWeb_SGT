@@ -10,6 +10,11 @@ const dataIni = new Date();
 
 const router: Router = Router();
 
+router.use((req: Request, res: Response, next) => {
+    console.log(new Date(), req.method, req.url);
+    next();
+});
+
 router.get("/status", (req: Request, res: Response) => {
     const dataNow = new Date();
     res.json({ message: "status Ok", dataIni, dataNow}).status(200);
