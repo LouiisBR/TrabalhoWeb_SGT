@@ -11,15 +11,6 @@ export const createTask = async (req: Request, res: Response) => {
   try{
     if (verif_body(req,res, TaskModel)){
       const taskData : Task = req.body;
-      const selectCategory = await categoryTable.findFirst({
-        where: {
-          id: taskData.categoryId as string
-        }
-      });
-
-      if(selectCategory && selectCategory.userId !== taskData.userId){
-        return handled_response(res, 401, {msg: 'você não tem permissão para usar essa categoria'});
-      }
 
       const task = await taskTable.create({
         data: {
@@ -66,24 +57,27 @@ export const updateTask = async (req: Request, res: Response) => {
         }
       });
 
+      if (selectCategory === null){
+        return handled_response(res, 404, {msg: 'nenhum dado encontrado na tabela para o id: ' + [taskData.categoryId]});
+      }
       if(selectCategory && selectCategory.userId !== taskData.userId){
-        return handled_response(res, 401, {msg: 'você não tem permissão para usar essa categoria'});
+        return handled_response(res, 403, {msg: 'você não tem permissão para usar essa categoria'});
       }
 
       const selectTask = await taskTable.findFirst({
         where: {
           id: taskId
         },
-        select:{
+        select: {
           userId: true
-        }
+        },
       });
 
       if (selectTask === null){
         return handled_response(res, 404, { msg: 'nenhum dado encontrado na tabela para o id: ' + [taskId] });
       }
       if (selectTask.userId !== taskData.userId){
-        return handled_response(res, 401, { msg: 'você não tem permissão para alterar esse dado' });
+        return handled_response(res, 403, { msg: 'você não tem permissão para alterar esse dado' });
       }
 
       const task = await taskTable.update({
@@ -196,11 +190,7 @@ export const getAllTask = async (req: Request, res: Response) => {
       }
     );
 
-    if (task === null || task.length === 0){
-      return handled_response(res, 404, { msg: 'nenhum dado encontrado na tabela' } );
-    }
-
-    return handled_response(res, 200, task);
+    return handled_response(res, 200, { _embedded: { list: task? task: [] } });
   }catch(e){
     console.log(new Date(), e);
     return handled_error(e, res);
@@ -215,16 +205,16 @@ export const deleteTask = async (req: Request, res: Response) => {
         where: {
           id: taskId
         },
-        select:{
+        select: {
           userId: true
-        }
+        },
       });
 
       if (selectTask === null){
         return handled_response(res, 404, { msg: 'nenhum dado encontrado na tabela para o id: ' + [taskId] });
       }
       if (selectTask.userId !== userId){
-        return handled_response(res, 401, { msg: 'você não tem permissão para deletar esse dado' });
+        return handled_response(res, 403, { msg: 'você não tem permissão para deletar esse dado' });
       }
 
       const task = await taskTable.delete({

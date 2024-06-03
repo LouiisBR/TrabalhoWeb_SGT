@@ -10,10 +10,20 @@ export const createCategory = async (req: Request, res: Response) => {
   try{
     if (verif_body(req,res, CategoryModel)){
       const categoryData : Category = req.body;
-      console.log(categoryData);
       const category = await categoryTable.create({
         data: {
           ...categoryData
+        },
+        select: {
+          id: true,
+          name: true,
+          user:{
+            select: {
+              id: true,
+              username: true,
+              email: true
+            }
+          }
         }
       });
 
@@ -44,7 +54,7 @@ export const updateCategory = async (req: Request, res: Response) => {
         return handled_response(res, 404, {msg: 'nenhum dado encontrado na tabela para o id: ' + [categoryId]});
       }
       if(selectCategory.userId !== userId){
-        return handled_response(res, 401, {msg: 'você não tem permissão para alterar esse dado'});
+        return handled_response(res, 403, {msg: 'você não tem permissão para alterar esse dado'});
       }
 
       const category = await categoryTable.update({
@@ -54,6 +64,17 @@ export const updateCategory = async (req: Request, res: Response) => {
         where: {
           id: categoryId,
           userId: userId
+        },
+        select: {
+          id: true,
+          name: true,
+          user:{
+            select: {
+              id: true,
+              username: true,
+              email: true
+            }
+          }
         }
       });
 
@@ -88,7 +109,7 @@ export const findByIdCategory = async (req: Request, res: Response) => {
     });
 
     if (category === null){
-      return handled_response(res, 404, { data: { msg: 'nenhum dado encontrado na tabela para o id: ' + [categoryId] } });
+      return handled_response(res, 404, { msg: 'nenhum dado encontrado na tabela para o id: ' + [categoryId] } );
     }
 
     return handled_response(res, 200, category);
@@ -120,11 +141,7 @@ export const getAllCategory = async (req: Request, res: Response) => {
       }
     );
 
-    if (category === null || category.length === 0){
-      return handled_response(res, 200, { data: { msg: 'nenhum dado encontrado na tabela' } });
-    }
-
-    return handled_response(res, 200, { data: { category } });
+    return handled_response(res, 200, { _embedded: { list: category? category: [] } });
   }catch(e){
     console.log(new Date(), e);
     return handled_error(e, res);
@@ -148,7 +165,7 @@ export const deleteCategory = async (req: Request, res: Response) => {
         return handled_response(res, 404, {msg: 'nenhum dado encontrado na tabela para o id: ' + [categoryId]});
       }
       if(selectCategory.userId !== userId){
-        return handled_response(res, 401, {msg: 'você não tem permissão para deletar esse dado'});
+        return handled_response(res, 403, {msg: 'você não tem permissão para deletar esse dado'});
       }
 
       const category = await categoryTable.delete({
