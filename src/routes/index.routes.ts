@@ -4,16 +4,10 @@ import routerCategory from "./category.routes";
 import routerTask from "./task.routes";
 import routerToken from "./token.routes";
 import { validateToken } from "../controllers";
-import { authBasic } from "../utils/basicAuth";
 
 const dataIni = new Date();
 
 const router: Router = Router();
-
-router.use((req: Request, res: Response, next) => {
-    console.log(new Date(), req.method, req.url);
-    next();
-});
 
 router.get("/status", (req: Request, res: Response) => {
     const dataNow = new Date();
@@ -22,7 +16,7 @@ router.get("/status", (req: Request, res: Response) => {
 
 
 router.use("/token", routerToken)
-router.use("/user", authBasic, routerUser)
+router.use("/user", routerUser)
 router.use("/category", validateToken, routerCategory)
 router.use("/task", validateToken, routerTask)
 

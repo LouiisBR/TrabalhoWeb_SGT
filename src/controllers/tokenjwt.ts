@@ -12,7 +12,7 @@ export const createToken = async (req: Request, res: Response) => {
   const { email, password } = req.body as User;
 
   if (!email || !password) {
-    return handled_response(res, 400, { msg: 'Email and password are required' });
+    return handled_response(res, 400, { msg: 'Email and password não encontrados' });
   }
 
   const user = await prisma.user.findFirst({
@@ -35,7 +35,7 @@ export const validateToken = async (req: Request, res: Response, next: NextFunct
   const token = req.headers.authorization?.split(' ')[1];
 
   if (!token) {
-    return handled_response(res, 401, { msg: 'Token not found' });
+    return handled_response(res, 401, { msg: 'Token não encontrado' });
   }
 
   jwt.verify;
@@ -49,8 +49,8 @@ export const validateToken = async (req: Request, res: Response, next: NextFunct
         req.query.userId = decoded.user_acess;
       return next()
     }
-    return handled_response(res, 401, { msg: 'Invalid token' });
+    return handled_response(res, 401, { msg: 'Token Inválido' });
   } catch (e) {
-    return handled_response(res, 401, { msg: 'Invalid token' });
+    return handled_response(res, 401, { msg: 'Token Inválido' });
   }
 }

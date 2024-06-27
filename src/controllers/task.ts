@@ -12,6 +12,17 @@ export const createTask = async (req: Request, res: Response) => {
     if (verif_body(req,res, TaskModel)){
       const taskData : Task = req.body;
 
+      const selectCategory = await categoryTable.findFirst({
+        where: {
+          id: taskData.categoryId as string,
+          userId: taskData.userId as string
+        }
+      });
+
+      if (selectCategory === null){
+        return handled_response(res, 404, {msg: 'nenhum dado encontrado na tabela para o id: ' + [taskData.categoryId]});
+      }
+
       const task = await taskTable.create({
         data: {
           ...taskData

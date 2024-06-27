@@ -90,3 +90,28 @@ export const deleteUser = async (req: Request, res: Response) => {
       return handled_error(e, res);
     }
 };
+
+export const getUserData = async (req: Request, res: Response) => {
+  try{
+    const userId= req.query.userId as string;
+    const user = await userTable.findUnique({
+      where: {
+        id: userId,
+      },
+      select: {
+        id: true,
+        username: true,
+        email: true,
+      }
+    });
+
+    if (user === null){
+      return handled_response(res, 404, {msg: 'nenhum dado encontrado na tabela para o id: ' + [userId]});
+    }
+
+    return handled_response(res, 200, user);
+  }catch(e){
+    console.log(new Date(), e);
+    return handled_error(e, res);
+  }
+};
