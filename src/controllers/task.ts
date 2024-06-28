@@ -33,6 +33,8 @@ export const createTask = async (req: Request, res: Response) => {
           description: true,
           createdAt: true,
           updatedAt: true,
+          status: true,
+          completedAt: true,
           category: {
             select: {
               id: true,
@@ -105,6 +107,8 @@ export const updateTask = async (req: Request, res: Response) => {
           description: true,
           createdAt: true,
           updatedAt: true,
+          status: true,
+          completedAt: true,
           category: {
             select: {
               id: true,
@@ -140,6 +144,8 @@ export const findByIdTask = async (req: Request, res: Response) => {
         description: true,
         createdAt: true,
         updatedAt: true,
+        status: true,
+        completedAt: true,
         category: {
           select: {
             id: true,
@@ -183,6 +189,8 @@ export const getAllTask = async (req: Request, res: Response) => {
           description: true,
           createdAt: true,
           updatedAt: true,
+          status: true,
+          completedAt: true,
           category: {
             select: {
               id: true,
@@ -239,6 +247,8 @@ export const deleteTask = async (req: Request, res: Response) => {
           description: true,
           createdAt: true,
           updatedAt: true,
+          status: true,
+          completedAt: true,
           category: {
             select: {
               id: true,
