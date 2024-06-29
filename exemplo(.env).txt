@@ -1,0 +1,4 @@
+DATABASE_URL="postgresql://postgres:postgres@localhost:5432/bdSGT?schema=public"
+USER="client-server"
+PASS="21112000"
+TOKEN_SECRET="luis"

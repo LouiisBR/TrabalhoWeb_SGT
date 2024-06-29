@@ -23,7 +23,7 @@ export const createUser = async (req: Request, res: Response) => {
       return handled_response(res, 201, user);
     }
   }catch(e){
-    console.log(new Date(), e);
+     
     return handled_error(e, res);
   }
 };
@@ -65,7 +65,7 @@ export const updatePassUser = async (req: Request, res: Response) => {
       return handled_response(res, 201, user);
     }
   }catch(e){
-    console.log(new Date(), e);
+     
     return handled_error(e, res);
   }
 };
@@ -86,7 +86,7 @@ export const deleteUser = async (req: Request, res: Response) => {
   
       return handled_response(res, 200, user);
     }catch(e){
-      console.log(new Date(), e);
+       
       return handled_error(e, res);
     }
 };
@@ -111,7 +111,7 @@ export const getUserData = async (req: Request, res: Response) => {
 
     return handled_response(res, 200, user);
   }catch(e){
-    console.log(new Date(), e);
+     
     return handled_error(e, res);
   }
 };

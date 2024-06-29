@@ -18,4 +18,9 @@ app.use(express.json());
 
 app.use(router);
 
-app.listen(port, () =>{});
+app.listen(port, () =>{
+    console.log(`API rodando na porta ${port}, criada por 
+    \n  Luis Antônio Gambatti Junior (CT3010864)
+    \n  Victor Gabriel Oliveira Vidal (CT3014274)
+    \n  Leonardo Dias Lieira (CT3014517)`);
+});

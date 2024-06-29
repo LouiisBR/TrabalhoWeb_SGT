@@ -53,7 +53,7 @@ export const createTask = async (req: Request, res: Response) => {
       return handled_response(res, 201, task);
     }
   }catch(e){
-    console.log(new Date(), e);
+     
     return handled_error(e, res);
   }
 };
@@ -128,7 +128,7 @@ export const updateTask = async (req: Request, res: Response) => {
       return handled_response(res, 201, task);
     }
   }catch(e){
-    console.log(new Date(), e);
+     
     return handled_error(e, res);
   }
 };
@@ -172,7 +172,7 @@ export const findByIdTask = async (req: Request, res: Response) => {
 
     return handled_response(res, 200, task);
   }catch(e){
-    console.log(new Date(), e);
+     
     return handled_error(e, res);
   }
 };
@@ -211,7 +211,7 @@ export const getAllTask = async (req: Request, res: Response) => {
 
     return handled_response(res, 200, { _embedded: { list: task? task: [] } });
   }catch(e){
-    console.log(new Date(), e);
+     
     return handled_error(e, res);
   }
 };
@@ -271,7 +271,7 @@ export const deleteTask = async (req: Request, res: Response) => {
   
       return handled_response(res, 200, task);
     }catch(e){
-      console.log(new Date(), e);
+       
       return handled_error(e, res);
     }
 };

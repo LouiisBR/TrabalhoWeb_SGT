@@ -30,7 +30,6 @@ export const createCategory = async (req: Request, res: Response) => {
       return handled_response(res, 201, category);
     }
   }catch(e){
-    console.log(new Date(), e);
     return handled_error(e, res);
   }
 };
@@ -81,7 +80,7 @@ export const updateCategory = async (req: Request, res: Response) => {
       return handled_response(res, 201, category);
     }
   }catch(e){
-    console.log(new Date(), e);
+     
     return handled_error(e, res);
   }
 };
@@ -114,7 +113,7 @@ export const findByIdCategory = async (req: Request, res: Response) => {
 
     return handled_response(res, 200, category);
   }catch(e){
-    console.log(new Date(), e);
+     
     return handled_error(e, res);
   }
 };
@@ -143,7 +142,7 @@ export const getAllCategory = async (req: Request, res: Response) => {
 
     return handled_response(res, 200, { _embedded: { list: category? category: [] } });
   }catch(e){
-    console.log(new Date(), e);
+     
     return handled_error(e, res);
   }
 };
@@ -188,7 +187,7 @@ export const deleteCategory = async (req: Request, res: Response) => {
   
       return handled_response(res, 200, category);
     }catch(e){
-      console.log(new Date(), e);
+       
       return handled_error(e, res);
     }
 };
